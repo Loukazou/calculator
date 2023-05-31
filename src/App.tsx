@@ -1,10 +1,13 @@
-function App() {
+import Calculator from './component/Calculator'
 
-  return (
-    <>
-      <h1 className='text-center font-bold text-6xl'>Hello World!</h1>
-    </>
-  )
+function App() {
+	return (
+		<>
+			<div className="flex sm:py-16 h-full items-center justify-center bg-gradient-to-r from-slate-400 to-slate-500">
+				<Calculator />
+			</div>
+		</>
+	)
 }
 
 export default App

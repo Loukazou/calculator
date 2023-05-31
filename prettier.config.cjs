@@ -18,7 +18,7 @@ module.exports = {
    "singleQuote": true,
    "trailingComma": "es5",
    "vueIndentScriptAndStyle": false,
-   "tabWidth": 3,
+   "tabWidth": 4,
    "useTabs": true,
    "plugins": [
       "@ianvs/prettier-plugin-sort-imports",

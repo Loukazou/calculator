@@ -1,5 +1,6 @@
 import { Variants } from "framer-motion"
 import colors from "tailwindcss/colors"
+import { AppState } from "./reducer"
 
 const animateNumberTap = {
 	backgroundColor: colors.gray[500],
@@ -24,9 +25,19 @@ const operatorVariants: Variants = {
 	},
 }
 
+const INITIAL_STATE: AppState = {
+	modifier: 0,
+	display: '0',
+	firstValue: 0,
+	decimal: false,
+	prevOperator: null,
+	currOperator: null,
+}
+
 export {
 	animateNumberTap,
 	animateTopOperatorTap,
 	animateSideOperatorTap,
 	operatorVariants,
+	INITIAL_STATE
 }

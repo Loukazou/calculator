@@ -1,42 +1,50 @@
-import { motion, useAnimation } from "framer-motion"
-import { PropsWithChildren, useRef } from "react"
-import { FocusRing, mergeProps, useButton } from "react-aria"
-import useSafeMotion from "../hooks/useSafeMotion"
+import type { HTMLMotionProps } from 'framer-motion'
+import { motion } from 'framer-motion'
+import type { ForwardedRef } from 'react'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
+import { AriaButtonProps, FocusRing, mergeProps, useButton } from 'react-aria'
+import cn from '../utils/cn'
 
-type ButtonProps = PropsWithChildren<{ onClick: () => void }>
+const ButtonComponent = (
+	props: ButtonProps,
+	ref: ForwardedRef<HTMLButtonElement>
+) => {
+	const { children, className, onPressStart, onPressEnd, onPress, ...rest } =
+		props
 
-export default function Button({ onClick, children }: ButtonProps) {
-	const controls = useAnimation()
-	const safeMotion = useSafeMotion({animate: controls})
-	const ref = useRef<HTMLButtonElement>(null)
+	const innerRef = useRef<HTMLButtonElement>(null)
+
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	useImperativeHandle(ref, () => innerRef.current!)
+
 	const { buttonProps } = useButton(
-		{
-			onPressStart: () => {
-				controls.stop()
-				controls.set({ background: "#757376" })
-			},
-			onPressEnd: () => {
-				controls.start({
-					background: "#353336",
-					transition: { duration: 0.4 },
-				})
-			},
-			onPress: onClick,
-		},
-		ref,
+		{ ...rest, children, onPressStart, onPressEnd, onPress },
+		innerRef
 	)
 
 	return (
-		<FocusRing focusRingClass="ring ring-offset-2 ring-offset-black">
+		<FocusRing focusRingClass="ring ring-offset-2 ring-offset-black ring-slate-100">
 			<motion.button
-				{...mergeProps(buttonProps, safeMotion)}
+				ref={innerRef}
 				style={{
-					WebkitTapHighlightColor: "transparent",
+					WebkitTapHighlightColor: 'transparent',
 				}}
-				className="h-20 w-20 touch-none select-none rounded-full bg-[#353336] text-[40px] text-white focus:outline-none"
-			>
+				className={cn(
+					'touch-none select-none focus:outline-none ',
+					className
+				)}
+				{...mergeProps(rest, buttonProps)}>
 				{children}
 			</motion.button>
 		</FocusRing>
 	)
 }
+
+export interface ButtonProps
+	extends AriaButtonProps,
+		Omit<HTMLMotionProps<'button'>, keyof AriaButtonProps> {
+	className?: string
+}
+const Button = forwardRef(ButtonComponent)
+
+export default Button
