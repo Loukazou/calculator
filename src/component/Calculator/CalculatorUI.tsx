@@ -2,15 +2,16 @@ import { useAppState } from '../../hooks/useAppState'
 import { operatorVariants } from './constants'
 import { keys, keyType, OperatorType } from './Keys'
 import {
-   NumberButton,
-   SideOperatorButton,
-   TopOperatorButton,
+	NumberButton,
+	SideOperatorButton,
+	TopOperatorButton,
 } from './Keys/Buttons'
 import { getDisplayFontSize } from './utils'
 
 export default function CalculatorUI() {
 	const { state } = useAppState()
-	const { display, currOperator, decimal, prevOperator } = state
+	const { display, currOperator } = state
+	const allClear = display === '0'
 
 	return (
 		<div className="flex min-h-screen min-w-[330px] max-w-md flex-1 flex-col bg-neutral-900 lg:rounded-lg lg:shadow-2xl ">
@@ -33,11 +34,6 @@ export default function CalculatorUI() {
 						keyButton.function !== null
 					) {
 						if (keyButton.function === OperatorType.allClear) {
-							const allClear = !(
-								display !== '0' ||
-								decimal !== false ||
-								prevOperator !== null
-							)
 							if (allClear) {
 								return (
 									<TopOperatorButton
@@ -53,7 +49,7 @@ export default function CalculatorUI() {
 								return (
 									<TopOperatorButton
 										key={index}
-										label='clear'
+										label="clear"
 										func={OperatorType.clear}>
 										<span className="absolute left-1/2 top-1/2 inline-block -translate-x-1/2 -translate-y-1/2">
 											C

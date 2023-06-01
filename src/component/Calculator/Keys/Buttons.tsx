@@ -1,17 +1,19 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { useAnimationControls, Variants } from 'framer-motion'
-import { ReactNode } from 'react'
+import { memo, ReactNode } from 'react'
 import colors from 'tailwindcss/colors'
 import { keyType, OperatorType } from '.'
 import { useAppState } from '../../../hooks/useAppState'
 import cn from '../../../utils/cn'
 import Button from '../../Button'
 import {
-	decimalHandler,
-	handleEqualKey,
-	numberHandler,
-	operatorHandler
-} from '../utils'
+	clearAll,
+	clearDisplay,
+	handleDecimal,
+	handleEqual,
+	handleNumber,
+	handleOperator,
+} from '../reducer/action'
 
 interface TopOperatorButtonProps {
 	children: ReactNode
@@ -23,20 +25,28 @@ interface TopOperatorButtonProps {
 		| OperatorType.percentage
 }
 
-export function TopOperatorButton({
+export const TopOperatorButton = memo(function TopOperatorButton({
 	children,
 	label,
 	func,
 }: TopOperatorButtonProps) {
 	const controls = useAnimationControls()
-	const { state, dispatch } = useAppState()
+	const { dispatch } = useAppState()
+	const onPress = () => {
+		if (func === OperatorType.allClear) {
+			dispatch(clearAll())
+		} else if (func === OperatorType.clear) {
+			dispatch(clearDisplay())
+		}
+	}
+
 	return (
 		<Button
 			animate={controls}
 			className={cn(
 				'relative aspect-square w-full rounded-full bg-gray-300/80 text-gray-800'
 			)}
-			onPress={() => operatorHandler(func, state, dispatch)}
+			onPress={onPress}
 			onPressEnd={() => {
 				controls.start({
 					background: '#d1d5dbcc',
@@ -51,7 +61,7 @@ export function TopOperatorButton({
 			{children}
 		</Button>
 	)
-}
+})
 
 interface SideOperatorButtonProps {
 	children: ReactNode
@@ -66,7 +76,7 @@ interface SideOperatorButtonProps {
 	animate?: string
 }
 
-export function SideOperatorButton({
+export const SideOperatorButton = memo(function SideOperatorButton({
 	children,
 	label,
 	variants,
@@ -74,7 +84,7 @@ export function SideOperatorButton({
 	func,
 }: SideOperatorButtonProps) {
 	const controls = useAnimationControls()
-	const { state, dispatch } = useAppState()
+	const { dispatch } = useAppState()
 	const isEqualKey = func === OperatorType.equal
 
 	const onPressEnd = isEqualKey
@@ -93,9 +103,9 @@ export function SideOperatorButton({
 		: undefined
 	const onPress = () => {
 		if (func === OperatorType.equal) {
-			handleEqualKey(state, dispatch)
+			dispatch(handleEqual())
 		} else {
-			operatorHandler(func, state, dispatch)
+			dispatch(handleOperator(func))
 		}
 	}
 	return (
@@ -112,7 +122,7 @@ export function SideOperatorButton({
 			{children}
 		</Button>
 	)
-}
+})
 
 interface NumberButtonProps {
 	children: ReactNode
@@ -121,20 +131,20 @@ interface NumberButtonProps {
 	func: keyType.number | keyType.decimal | keyType.zero
 }
 
-export function NumberButton({
+export const NumberButton = memo(function NumberButton({
 	children,
 	label,
 	func,
 	value,
 }: NumberButtonProps) {
 	const controls = useAnimationControls()
-	const { state, dispatch } = useAppState()
+	const { dispatch } = useAppState()
 
 	const onPress = () => {
 		if (func === keyType.decimal) {
-			decimalHandler(state, dispatch)
+			dispatch(handleDecimal())
 		} else {
-			numberHandler(value, state, dispatch)
+			dispatch(handleNumber(value))
 		}
 	}
 	return (
@@ -159,4 +169,4 @@ export function NumberButton({
 			{children}
 		</Button>
 	)
-}
+})
