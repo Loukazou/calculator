@@ -63,7 +63,7 @@ export default function CalculatorUI() {
 									key={index}
 									label={keyButton.ariaLabel}
 									func={keyButton.function}>
-									<span className="absolute left-2/4 top-2/4 inline-block -translate-x-2/4 -translate-y-[50%]">
+									<span className="absolute left-1/2 top-1/2 inline-block -translate-x-1/2 -translate-y-[50%]">
 										{keyButton.key}
 									</span>
 								</TopOperatorButton>
@@ -77,7 +77,7 @@ export default function CalculatorUI() {
 									label={keyButton.ariaLabel}
 									key={index}
 									func={keyButton.function}>
-									<span className="absolute left-2/4 top-2/4 inline-block -translate-x-[49%] -translate-y-[58%]">
+									<span className="absolute left-1/2 top-1/2 inline-block -translate-x-[50%] -translate-y-[58%]">
 										{keyButton.key}
 									</span>
 								</SideOperatorButton>
@@ -95,7 +95,7 @@ export default function CalculatorUI() {
 											: undefined
 									}
 									func={keyButton.function}>
-									<span className="absolute left-2/4 top-2/4 inline-block -translate-x-[49%] -translate-y-[58%]">
+									<span className="absolute left-1/2 top-1/2 inline-block -translate-x-[50%] -translate-y-[58%]">
 										{keyButton.key}
 									</span>
 								</SideOperatorButton>

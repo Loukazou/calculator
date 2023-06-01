@@ -13,6 +13,8 @@ import {
 	handleEqual,
 	handleNumber,
 	handleOperator,
+	handlePercentage,
+	togglePositiveNegative,
 } from '../reducer/action'
 
 interface TopOperatorButtonProps {
@@ -37,6 +39,12 @@ export const TopOperatorButton = memo(function TopOperatorButton({
 			dispatch(clearAll())
 		} else if (func === OperatorType.clear) {
 			dispatch(clearDisplay())
+		} else if (func === OperatorType.togglePlusMinus) {
+			// 3 -> -3 -> 3
+			dispatch(togglePositiveNegative())
+		} else if (func === OperatorType.percentage) {
+			// 3 -> 0.03 -> 0.0003
+			dispatch(handlePercentage())
 		}
 	}
 

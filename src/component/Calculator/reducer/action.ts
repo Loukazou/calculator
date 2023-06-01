@@ -5,6 +5,8 @@ export type OperatorPayloadType = OperatorTypeValues | null
 export type Action =
 	| { type: 'clearAll' }
 	| { type: 'clearDisplay' }
+	| { type: 'togglePositiveNegative' }
+	| { type: 'handlePercentage' }
 	| { type: 'handleEqual' }
 	| { type: 'handleDecimal' }
 	| { type: 'handleOperator'; payload: OperatorType }
@@ -14,6 +16,14 @@ export const clearAll = (): Action => ({ type: 'clearAll' })
 
 export const clearDisplay = (): Action => ({
 	type: 'clearDisplay',
+})
+
+export const togglePositiveNegative = (): Action => ({
+	type: 'togglePositiveNegative',
+})
+
+export const handlePercentage = (): Action => ({
+	type: 'handlePercentage',
 })
 
 export const handleOperator = (payload: OperatorType): Action => ({
