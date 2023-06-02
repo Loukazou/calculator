@@ -36,15 +36,18 @@ export const TopOperatorButton = memo(function TopOperatorButton({
 	const { dispatch } = useAppState()
 	const onPress = () => {
 		if (func === OperatorType.allClear) {
-			dispatch(clearAll())
-		} else if (func === OperatorType.clear) {
-			dispatch(clearDisplay())
-		} else if (func === OperatorType.togglePlusMinus) {
+			return dispatch(clearAll())
+		}
+		if (func === OperatorType.clear) {
+			return dispatch(clearDisplay())
+		}
+		if (func === OperatorType.togglePlusMinus) {
 			// 3 -> -3 -> 3
-			dispatch(togglePositiveNegative())
-		} else if (func === OperatorType.percentage) {
+			return dispatch(togglePositiveNegative())
+		}
+		if (func === OperatorType.percentage) {
 			// 3 -> 0.03 -> 0.0003
-			dispatch(handlePercentage())
+			return dispatch(handlePercentage())
 		}
 	}
 
@@ -136,20 +139,20 @@ interface NumberButtonProps {
 	children: ReactNode
 	label: string
 	value: string
-	func: keyType.number | keyType.decimal | keyType.zero
+	type: keyType.number | keyType.decimal | keyType.zero
 }
 
 export const NumberButton = memo(function NumberButton({
 	children,
 	label,
-	func,
+	type,
 	value,
 }: NumberButtonProps) {
 	const controls = useAnimationControls()
 	const { dispatch } = useAppState()
 
 	const onPress = () => {
-		if (func === keyType.decimal) {
+		if (type === keyType.decimal) {
 			dispatch(handleDecimal())
 		} else {
 			dispatch(handleNumber(value))
@@ -160,7 +163,7 @@ export const NumberButton = memo(function NumberButton({
 			animate={controls}
 			className={cn(
 				'relative w-full rounded-full bg-neutral-700 text-white',
-				func === keyType.zero ? 'col-span-2' : 'aspect-square'
+				type === keyType.zero ? 'col-span-2' : 'aspect-square'
 			)}
 			onPress={onPress}
 			onPressEnd={() => {

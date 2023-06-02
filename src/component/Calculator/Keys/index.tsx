@@ -122,13 +122,13 @@ export const keys = [
 	{
 		key: '0',
 		type: keyType.zero,
-		function: OperatorType.togglePlusMinus,
+		function: null,
 		ariaLabel: '0',
 	},
 	{
 		key: '.',
 		type: keyType.decimal,
-		function: OperatorType.togglePlusMinus,
+		function: OperatorType.decimal,
 		ariaLabel: 'decimal',
 	},
 	{

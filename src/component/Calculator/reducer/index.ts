@@ -40,12 +40,11 @@ export const reducer: ImmerReducer<AppState, Action> = (draft, action) => {
 			break
 		}
 		case 'togglePositiveNegative': {
-			const { display, modifier } = draft
+			const { display } = draft
 			const currentValue = parseFloat(display) * -1
+			draft.firstValue = currentValue
 			draft.display = currentValue.toString()
-			if (modifier !== 0) {
-				draft.modifier = currentValue
-			}
+			draft.result = currentValue.toString()
 			break
 		}
 		case 'handlePercentage': {
@@ -55,62 +54,57 @@ export const reducer: ImmerReducer<AppState, Action> = (draft, action) => {
 			break
 		}
 		case 'handleOperator': {
+			/* When one of the side operator is click */
 			const fn = action.payload
-			const {
-				firstValue,
-				modifier,
-				prevOperator,
-				currOperator,
-				display,
-			} = draft
+			const { firstValue, prevOperator, currOperator, display } = draft
+
 			const currentValue = parseFloat(display) * 1
-
-			if (fn === prevOperator && currOperator !== OperatorType.equal) {
-				if (currOperator || prevOperator === currOperator) {
-					draft.currOperator = fn
-					return
-				}
-				let calculated: number
-				if (prevOperator && modifier) {
-					calculated = calculate(firstValue, modifier, prevOperator)
-				} else {
-					calculated = calculate(
-						firstValue,
-						currentValue,
-						prevOperator
-					)
-				}
-				draft.firstValue = currentValue
-				draft.display = calculated.toString()
-				draft.result = calculated.toString()
-				draft.currOperator = prevOperator
-			} else {
-				draft.firstValue = currentValue
-				draft.currOperator = fn
-			}
-			draft.decimal = false
-			break
-		}
-		case 'handleEqual': {
-			const { firstValue, modifier, prevOperator, currOperator, result } =
-				draft
-
-			if (prevOperator == null) draft.prevOperator = currOperator
-
-			if (modifier == null) draft.modifier = firstValue
-
-			if (prevOperator && prevOperator !== OperatorType.equal) {
+			if (!currOperator && prevOperator) {
 				const calculated = calculate(
-					result ? parseFloat(result) : firstValue,
-					modifier,
+					firstValue,
+					currentValue,
 					prevOperator
 				)
 				draft.firstValue = calculated
 				draft.display = calculated.toString()
 				draft.result = calculated.toString()
+			} else {
+				draft.firstValue = currentValue
 			}
 			draft.decimal = false
+			draft.currOperator = fn
+			break
+		}
+		case 'handleEqual': {
+			/* When the handle key is click */
+			const { firstValue, modifier, prevOperator, currOperator, result } =
+				draft
+			/*  case where the user made a calculation and presses enter again */
+			if (prevOperator && prevOperator !== OperatorType.equal) {
+				const calculated =
+					calculate(
+						result ? parseFloat(result) : firstValue,
+						modifier,
+						prevOperator
+					) * 1
+				draft.firstValue = calculated
+				draft.display = calculated.toString()
+				draft.result = calculated.toString()
+			} else if (currOperator) {
+				const calculated = calculate(
+					result ? parseFloat(result) : firstValue,
+					firstValue,
+					currOperator
+				)
+				draft.modifier = firstValue
+				draft.firstValue = calculated
+				draft.display = calculated.toString()
+				draft.result = calculated.toString()
+			}
 
+			if (prevOperator == null) draft.prevOperator = currOperator
+
+			draft.decimal = false
 			draft.currOperator = OperatorType.equal
 			break
 		}
@@ -147,15 +141,11 @@ export const reducer: ImmerReducer<AppState, Action> = (draft, action) => {
 		case 'handleDecimal': {
 			const { display, currOperator, decimal } = draft
 			if (currOperator) {
-				draft = INITIAL_STATE
-				draft.decimal = true
 				draft.display = '0.'
-			} else {
-				if (!decimal) {
-					draft.decimal = true
-					draft.display = display + '.'
-				}
+			} else if (!decimal) {
+				draft.display = display + '.'
 			}
+			draft.decimal = true
 			break
 		}
 		default:

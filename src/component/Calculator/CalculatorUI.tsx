@@ -10,8 +10,8 @@ import { getDisplayFontSize } from './utils'
 
 export default function CalculatorUI() {
 	const { state } = useAppState()
-	const { display, currOperator } = state
-	const allClear = display === '0'
+	const { display, currOperator, result } = state
+	const allClear = result === null
 
 	return (
 		<div className="flex min-h-screen min-w-[330px] max-w-md flex-1 flex-col bg-neutral-900 lg:rounded-lg lg:shadow-2xl ">
@@ -107,7 +107,7 @@ export default function CalculatorUI() {
 							<NumberButton
 								label={keyButton.ariaLabel}
 								key={index}
-								func={keyType.number}
+								type={keyType.number}
 								value={keyButton.key}>
 								{keyButton.key}
 							</NumberButton>
@@ -118,7 +118,7 @@ export default function CalculatorUI() {
 							<NumberButton
 								label={keyButton.ariaLabel}
 								key={index}
-								func={keyType.zero}
+								type={keyType.zero}
 								value={keyButton.key}>
 								{keyButton.key}
 							</NumberButton>
@@ -129,7 +129,7 @@ export default function CalculatorUI() {
 							<NumberButton
 								label={keyButton.ariaLabel}
 								key={index}
-								func={keyType.number}
+								type={keyType.decimal}
 								value={keyButton.key}>
 								{keyButton.key}
 							</NumberButton>
