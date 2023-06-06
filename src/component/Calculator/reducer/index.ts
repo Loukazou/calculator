@@ -44,7 +44,7 @@ export const reducer: ImmerReducer<AppState, Action> = (draft, action) => {
 			const currentValue = parseFloat(display) * -1
 			draft.firstValue = currentValue
 			draft.display = currentValue.toString()
-			draft.result = currentValue.toString()
+			draft.modifier = currentValue
 			break
 		}
 		case 'handlePercentage': {
