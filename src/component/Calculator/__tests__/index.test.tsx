@@ -191,6 +191,26 @@ const tests: Tests[] = [
 		],
 		result: "15",
 	},
+	{
+		message: "Negative number addition",
+		keys: [
+			"6",
+			"toggle plus minus",
+			"addition",
+			"6",
+			"toggle plus minus",
+			"equal",
+		],
+		result: "-12",
+	},{
+		message: "Handle percentage",
+		keys: [
+			"6",
+			"0",
+			"toggle percentage",
+		],
+		result: "0.6",
+	},
 ]
 
 describe("Calculator component test", () => {
